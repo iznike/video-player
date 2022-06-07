@@ -1,0 +1,1 @@
+javac %FX%,javafx.media src\*.java -d bin

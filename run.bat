@@ -1,0 +1,1 @@
+java %FX%,javafx.media -cp bin Main
