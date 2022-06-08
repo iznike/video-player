@@ -11,7 +11,9 @@ public class Main extends Application{
 
     @Override
     public void start(Stage stage) throws Exception{
-        Parent root = FXMLLoader.load(new File("src/player.fxml").toURI().toURL());
+        DBController.createDB();
+
+        Parent root = FXMLLoader.load(new File("src/home.fxml").toURI().toURL());
         Scene scene = new Scene(root, 800, 600);
         stage.setScene(scene);
         // stage.setFullScreen(true);
