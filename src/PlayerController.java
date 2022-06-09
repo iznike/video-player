@@ -6,6 +6,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.stage.Stage;
 
 public class PlayerController {
     
@@ -15,15 +16,25 @@ public class PlayerController {
     @FXML
     private MediaView mediaView;
 
+    // private int video_id;
+    private Stage stage;
     private MediaPlayer mediaPlayer;
     private boolean playing;
 
     @FXML
     private void initialize() {
-        File file = new File("C:\\Users\\bel\\Videos\\SampleVideo_1280x720_30mb.mp4");
-        Media media = new Media(file.toURI().toString());
+        
+    }
+
+    public void loadVideo(String title, Media media) {
+
+        // this.video_id = video_id;
+        stage = (Stage) stack.getScene().getWindow();
+        stage.setTitle(title);
+
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.setAutoPlay(true);
+        mediaPlayer.setOnError(()->System.out.println("media error"+mediaPlayer.getError().toString()));
         playing = true;
         mediaView.setMediaPlayer(mediaPlayer);
         mediaView.setFitWidth(800);
