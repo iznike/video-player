@@ -1,1 +1,1 @@
-java %FX%,javafx.media -cp "bin;lib\sqlite-jdbc-3.36.0.3.jar" Main
+java %FX%,javafx.media -cp "bin;lib\sqlite-jdbc-3.36.0.3.jar;lib\fontawesomefx-8.9.jar" Main

@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.media.MediaView?>
+<?import javafx.scene.text.Font?>
 
 <StackPane fx:id="stack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PlayerController">
    <children>
@@ -36,7 +37,7 @@
                      <children>
                         <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0">
+                              <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER">
                                  <HBox.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </HBox.margin>
@@ -45,19 +46,24 @@
                         </HBox>
                         <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
                            <children>
-                              <Button fx:id="btnPause" mnemonicParsing="false" onAction="#playPause" prefHeight="40.0" prefWidth="40.0">
+                              <Button fx:id="btnBackTen" mnemonicParsing="false" onAction="#backTen" prefHeight="30.0" prefWidth="30.0" textAlignment="CENTER" />
+                              <Button fx:id="btnPause" mnemonicParsing="false" onAction="#playPause" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER">
                                  <HBox.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </HBox.margin>
                               </Button>
+                              <Button fx:id="btnForwardTen" mnemonicParsing="false" onAction="#forwardTen" prefHeight="30.0" prefWidth="30.0" textAlignment="CENTER" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
                            <children>
-                              <Button fx:id="btnFullScreen" alignment="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0">
+                              <Button fx:id="btnFullScreen" alignment="CENTER" mnemonicParsing="false" onAction="#fullscreen" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER">
                                  <HBox.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </HBox.margin>
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
                               </Button>
                            </children>
                         </HBox>
@@ -67,7 +73,7 @@
             </VBox>
          </bottom>
          <top>
-            <Button fx:id="btnBack" contentDisplay="TOP" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" text="&lt;-" BorderPane.alignment="TOP_LEFT">
+            <Button fx:id="btnBack" contentDisplay="TOP" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER" BorderPane.alignment="TOP_LEFT">
                <BorderPane.margin>
                   <Insets left="10.0" top="10.0" />
                </BorderPane.margin>

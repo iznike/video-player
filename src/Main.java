@@ -14,6 +14,7 @@ public class Main extends Application{
     @Override
     public void start(Stage stage) throws IOException{
         DBController.createDB();
+        Icon.loadFonts();
 
         Parent root = FXMLLoader.load(new File("src/home.fxml").toURI().toURL());
         Scene scene = new Scene(root);

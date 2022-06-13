@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
@@ -42,6 +43,12 @@ public class PlayerController {
     @FXML
     private Label lblMaxTime;
 
+    @FXML
+    private Button btnBackTen;
+
+    @FXML
+    private Button btnForwardTen;
+
     // private int video_id;
     private Stage stage;
     private MediaPlayer mediaPlayer;
@@ -51,6 +58,25 @@ public class PlayerController {
     @FXML
     private void initialize() {
  
+        //Set up icons
+        Labeled[] iconsNeeded12 = {btnBackTen, btnForwardTen};
+        for (int i=0;i<iconsNeeded12.length;i++) {
+            iconsNeeded12[i].setFont(Icon.fontAwesome12);
+        }
+        
+        Labeled[] iconsNeeded18 = {btnBack, btnPause, btnFullScreen};
+        for (int i=0;i<iconsNeeded18.length;i++) {
+            iconsNeeded18[i].setFont(Icon.fontAwesome18);
+        }
+
+        btnBack.setText(Icon.ARROW_LEFT);
+        btnPause.setText(Icon.PAUSE);
+        btnBackTen.setText(Icon.BACKWARD);
+        btnForwardTen.setText(Icon.FORWARD);
+        btnFullScreen.setText(Icon.EXPAND);
+
+        
+        //Mouse movement detection
         BooleanProperty mouseMoving = new SimpleBooleanProperty();
         mouseMoving.addListener((obs, wasMoving, isNowMoving) -> {
             //Hide when mouse has stopped for set time
@@ -69,6 +95,7 @@ public class PlayerController {
             //Show when mouse moves
             border.setVisible(true);
         });
+
     }
 
     public void loadVideo(String title, Media media) {
@@ -103,7 +130,8 @@ public class PlayerController {
         });
         mediaPlayer.setOnError(()->System.out.println("media error"+mediaPlayer.getError().toString()));
         mediaView.setMediaPlayer(mediaPlayer);
-        mediaView.setFitWidth(800);
+        // mediaView.setFitWidth(800);
+        mediaView.fitWidthProperty().bind(stage.getScene().widthProperty());
 
         //When mediaPlayer time changes, update slider value and current time label
         mediaPlayer.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
@@ -132,20 +160,33 @@ public class PlayerController {
         if (playing) {
             mediaPlayer.pause();
             playing = false;
+            btnPause.setText(Icon.PLAY);
         } else {
             mediaPlayer.play();
             playing = true;
+            btnPause.setText(Icon.PAUSE);
         }
     }
 
-    // @FXML
+    @FXML
     private void backTen() {
         mediaPlayer.seek(mediaPlayer.getCurrentTime().subtract(Duration.seconds(10)));
     }
 
-    // @FXML
+    @FXML
     private void forwardTen() {
         mediaPlayer.seek(mediaPlayer.getCurrentTime().add(Duration.seconds(10)));
+    }
+
+    @FXML
+    private void fullscreen() {
+        if (stage.isFullScreen()) {
+            stage.setFullScreen(false);
+            btnFullScreen.setText(Icon.EXPAND);
+        } else {
+            stage.setFullScreen(true);
+            btnFullScreen.setText(Icon.COMPRESS);
+        }
     }
 
     private String minutesToHMS(double mins) {
