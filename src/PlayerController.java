@@ -1,7 +1,13 @@
+import java.io.File;
+import java.io.IOException;
+
 import javafx.animation.PauseTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
@@ -49,7 +55,7 @@ public class PlayerController {
     @FXML
     private Button btnForwardTen;
 
-    // private int video_id;
+    private int video_id;
     private Stage stage;
     private MediaPlayer mediaPlayer;
     private boolean playing;
@@ -98,9 +104,9 @@ public class PlayerController {
 
     }
 
-    public void loadVideo(String title, Media media) {
+    public void loadVideo(int video_id, String title, Media media, Duration resumeTime) {
 
-        // this.video_id = video_id;
+        this.video_id = video_id;
         stage = (Stage) stack.getScene().getWindow();
         stage.setTitle(title);
 
@@ -125,6 +131,7 @@ public class PlayerController {
             //Once mediaPlayer has loaded media
             slider.setMax(media.getDuration().toMinutes());
             lblMaxTime.setText(minutesToHMS(slider.getMax()));
+            mediaPlayer.seek(resumeTime);
             mediaPlayer.play();
             playing = true;
         });
@@ -189,6 +196,22 @@ public class PlayerController {
         }
     }
 
+    @FXML
+    private void exit() {
+
+        saveResumeTime();
+                
+        //Load home page
+        try {
+            Parent root = FXMLLoader.load(new File("src/home.fxml").toURI().toURL());
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+    }
+
     private String minutesToHMS(double mins) {
 
         double tempMins = mins;
@@ -210,6 +233,21 @@ public class PlayerController {
         }
 
         return HMS;
+    }
+
+    private void saveResumeTime() {
+
+        Duration currentTime = mediaPlayer.getCurrentTime();
+
+        //If video at end, reset resume time to 0, if not, save where video is up to and stop it
+        if (currentTime.equals(mediaPlayer.getStopTime())) {
+            DBController.updateVideoTime(video_id, 0);
+        } else {
+            DBController.updateVideoTime(video_id, currentTime.toMinutes());
+        }
+
+        mediaPlayer.stop();
+
     }
 
 }

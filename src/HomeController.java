@@ -21,13 +21,12 @@ public class HomeController {
     @FXML
     private void initialize() {
 
-        ArrayList<String> videos = DBController.selectFiles();
-        videos.forEach((x) -> {
-                MovieTile tile = new MovieTile(0, x, x, 0);
-                tile.setOnPlay((e) -> {
+        ArrayList<MovieTile> tiles = DBController.selectVideosAsTiles();
+        tiles.forEach((x) -> {
+                x.setOnPlay((e) -> {
                     playVideo((MovieTile) e.getSource());
                 });
-                videoList.getChildren().add(tile);
+                videoList.getChildren().add(x);
             });
     }
 
@@ -39,8 +38,8 @@ public class HomeController {
         File selectedFile = fileChooser.showOpenDialog(addButton.getScene().getWindow());
 
         if (selectedFile != null) {
-            DBController.insertVideo(selectedFile.getPath(), selectedFile.getPath());
-            MovieTile tile = new MovieTile(0, selectedFile.getName(), selectedFile.getPath(), 0);
+            int id = DBController.insertVideo(selectedFile.getPath(), selectedFile.getPath());
+            MovieTile tile = new MovieTile(id, selectedFile.getName(), selectedFile.getPath(), 0);
                 tile.setOnPlay((e) -> {
                     playVideo((MovieTile) e.getSource());
                 });
@@ -57,7 +56,7 @@ public class HomeController {
             stage.setScene(scene);
 
             PlayerController controller = loader.getController();
-            controller.loadVideo(tile.getTitle(), tile.getMedia());
+            controller.loadVideo(tile.getVideoID(), tile.getTitle(), tile.getMedia(), tile.getResumeTime());
 
         } catch (IOException ex) {
             ex.printStackTrace();

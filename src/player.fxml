@@ -73,7 +73,7 @@
             </VBox>
          </bottom>
          <top>
-            <Button fx:id="btnBack" contentDisplay="TOP" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER" BorderPane.alignment="TOP_LEFT">
+            <Button fx:id="btnBack" contentDisplay="TOP" mnemonicParsing="false" onAction="#exit" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER" BorderPane.alignment="TOP_LEFT">
                <BorderPane.margin>
                   <Insets left="10.0" top="10.0" />
                </BorderPane.margin>
