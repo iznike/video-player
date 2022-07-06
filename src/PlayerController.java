@@ -6,6 +6,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -55,6 +56,15 @@ public class PlayerController {
     @FXML
     private Button btnForwardTen;
 
+    @FXML
+    private Button btnVolume;
+
+    @FXML
+    private Slider volumeSlider;
+
+    @FXML
+    private Group volumeGroup;
+
     private int video_id;
     private Stage stage;
     private MediaPlayer mediaPlayer;
@@ -65,7 +75,7 @@ public class PlayerController {
     private void initialize() {
  
         //Set up icons
-        Labeled[] iconsNeeded12 = {btnBackTen, btnForwardTen};
+        Labeled[] iconsNeeded12 = {btnBackTen, btnForwardTen, btnVolume};
         for (int i=0;i<iconsNeeded12.length;i++) {
             iconsNeeded12[i].setFont(Icon.fontAwesome12);
         }
@@ -80,13 +90,13 @@ public class PlayerController {
         btnBackTen.setText(Icon.BACKWARD);
         btnForwardTen.setText(Icon.FORWARD);
         btnFullScreen.setText(Icon.EXPAND);
-
+        btnVolume.setText(Icon.VOLUME_DOWN);
         
         //Mouse movement detection
         BooleanProperty mouseMoving = new SimpleBooleanProperty();
         mouseMoving.addListener((obs, wasMoving, isNowMoving) -> {
-            //Hide when mouse has stopped for set time
-            if (!isNowMoving) {
+            //Hide when mouse has stopped for set time, unless stopped over a control button
+            if (!isNowMoving && !isHoverControls()) {
                 border.setVisible(false);
             }
         });
@@ -137,8 +147,17 @@ public class PlayerController {
         });
         mediaPlayer.setOnError(()->System.out.println("media error"+mediaPlayer.getError().toString()));
         mediaView.setMediaPlayer(mediaPlayer);
-        // mediaView.setFitWidth(800);
+
+        //Bind mediaView width to width of window
         mediaView.fitWidthProperty().bind(stage.getScene().widthProperty());
+
+        //Bind mediaPlayer volume to volumeSlider
+        mediaPlayer.volumeProperty().bind(volumeSlider.valueProperty());
+
+        //Change volume button icon as volume is changed
+        mediaPlayer.volumeProperty().addListener((obs, oldVolume, newVolume) -> {
+            setVolumeIcon();
+        });
 
         //When mediaPlayer time changes, update slider value and current time label
         mediaPlayer.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
@@ -212,6 +231,44 @@ public class PlayerController {
         
     }
 
+    @FXML
+    private void onMouseEnterVolume() {
+        volumeSlider.setVisible(true);
+    }
+
+    @FXML
+    private void onMouseExitVolume() {
+        volumeSlider.setVisible(false);
+    }
+
+    @FXML
+    private void onVolumeClicked() {
+        //Unmute or mute
+        if (mediaPlayer.isMute()) {
+            mediaPlayer.setMute(false);
+            setVolumeIcon();
+        }
+        else {
+            mediaPlayer.setMute(true);
+            btnVolume.setText(Icon.VOLUME_MUTE);
+        }
+    }
+
+    private void setVolumeIcon() {
+        double volumeValue = volumeSlider.getValue();
+
+        //Set volume button icon based on what the volume is
+        if (volumeValue == 0) {
+            btnVolume.setText(Icon.VOLUME_MUTE);
+        }
+        else if (volumeValue > 0 && volumeValue <= 0.5) {
+            btnVolume.setText(Icon.VOLUME_DOWN);
+        }
+        else {
+            btnVolume.setText(Icon.VOLUME_UP);
+        }
+    }
+
     private String minutesToHMS(double mins) {
 
         double tempMins = mins;
@@ -248,6 +305,12 @@ public class PlayerController {
 
         mediaPlayer.stop();
 
+    }
+
+    private boolean isHoverControls() {
+        return volumeGroup.isHover() || btnBackTen.isHover()
+            || btnPause.isHover() || btnForwardTen.isHover()
+            || btnFullScreen.isHover();
     }
 
 }

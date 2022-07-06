@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
@@ -35,16 +36,20 @@
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="60.0" prefWidth="800.0">
                      <children>
-                        <HBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_LEFT" prefWidth="250.0" HBox.hgrow="ALWAYS">
                            <children>
-                              <Button mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER">
+                              <Group fx:id="volumeGroup" onMouseEntered="#onMouseEnterVolume" onMouseExited="#onMouseExitVolume">
+                                 <children>
+                                    <Button fx:id="btnVolume" mnemonicParsing="false" onAction="#onVolumeClicked" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER" />
+                                    <Slider fx:id="volumeSlider" blockIncrement="0.0" layoutX="40.0" layoutY="11.333333969116211" max="1.0" prefHeight="17.0" prefWidth="70.0" value="0.5" />
+                                 </children>
                                  <HBox.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                  </HBox.margin>
-                              </Button>
+                              </Group>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER" prefWidth="250.0" HBox.hgrow="ALWAYS">
                            <children>
                               <Button fx:id="btnBackTen" mnemonicParsing="false" onAction="#backTen" prefHeight="30.0" prefWidth="30.0" textAlignment="CENTER" />
                               <Button fx:id="btnPause" mnemonicParsing="false" onAction="#playPause" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER">
@@ -55,7 +60,7 @@
                               <Button fx:id="btnForwardTen" mnemonicParsing="false" onAction="#forwardTen" prefHeight="30.0" prefWidth="30.0" textAlignment="CENTER" />
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                        <HBox alignment="CENTER_RIGHT" prefWidth="250.0" HBox.hgrow="ALWAYS">
                            <children>
                               <Button fx:id="btnFullScreen" alignment="CENTER" mnemonicParsing="false" onAction="#fullscreen" prefHeight="40.0" prefWidth="40.0" textAlignment="CENTER">
                                  <HBox.margin>
