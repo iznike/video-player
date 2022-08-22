@@ -29,6 +29,12 @@ public class Icon {
 
     public static final String BACKWARD = "\uf04a";
 
+    public static final String EDIT = "\uf044";
+
+    public static final String CHEVRON_LEFT = "\uf053";
+
+    public static final String CHEVRON_RIGHT = "\uf054";
+
     public static final void loadFonts() {
         fontAwesome12 = loadFontBySize(12);
         fontAwesome18 = loadFontBySize(18);

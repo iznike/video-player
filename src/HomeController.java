@@ -6,6 +6,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -13,20 +16,27 @@ import javafx.stage.Stage;
 public class HomeController {
 
     @FXML
-    private VBox videoList;
+    private VBox lolomo;
 
     @FXML
     private Button addButton;
 
+    private LolomoRow videoList;
+
     @FXML
     private void initialize() {
+
+        videoList = new LolomoRow();
+        videoList.setTitle("test row");
+        lolomo.getChildren().add(videoList);
 
         ArrayList<MovieTile> tiles = DBController.selectVideosAsTiles();
         tiles.forEach((x) -> {
                 x.setOnPlay((e) -> {
                     playVideo((MovieTile) e.getSource());
                 });
-                videoList.getChildren().add(x);
+                // videoList.getChildren().add(x);
+                videoList.addChildren(x);
             });
     }
 
@@ -43,7 +53,8 @@ public class HomeController {
                 tile.setOnPlay((e) -> {
                     playVideo((MovieTile) e.getSource());
                 });
-                videoList.getChildren().add(tile);
+                // videoList.getChildren().add(tile);
+                videoList.addChildren(tile);
         }
     }
 
