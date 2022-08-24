@@ -12,7 +12,7 @@
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="stack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PlayerController">
+<StackPane fx:id="stack" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: black;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="PlayerController">
    <children>
       <MediaView fx:id="mediaView" />
       <BorderPane fx:id="border" onMouseClicked="#playPause" prefHeight="200.0" prefWidth="200.0">
@@ -21,13 +21,13 @@
                <children>
                   <HBox alignment="CENTER">
                      <children>
-                        <Label fx:id="lblCurrentTime" text="Label">
+                        <Label fx:id="lblCurrentTime" style="-fx-text-fill: white;" text="Label">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin>
                         </Label>
                         <Slider fx:id="slider" focusTraversable="false" HBox.hgrow="ALWAYS" />
-                        <Label fx:id="lblMaxTime" text="Label">
+                        <Label fx:id="lblMaxTime" style="-fx-text-fill: white;" text="Label">
                            <HBox.margin>
                               <Insets right="5.0" />
                            </HBox.margin>

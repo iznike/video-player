@@ -38,9 +38,6 @@ public class MovieTile extends StackPane {
     private File file;
     private double resume_time;
 
-    // private Label lblTitle;
-    // private Button btnPlay;
-    // private HBox buttons;
     private VBox overlay;
 
     private EventHandler<ActionEvent> onPlay;
@@ -74,18 +71,12 @@ public class MovieTile extends StackPane {
         //Set up buttons
         Button btnPlay = new Button(Icon.PLAY);
         btnPlay.setFont(Icon.fontAwesome12);
-        btnPlay.setTextFill(Paint.valueOf("white"));
-        btnPlay.setStyle("-fx-background-color: transparent");
-        btnPlay.setCursor(Cursor.HAND);
         btnPlay.setOnAction((e) -> {
             onPlay.handle(new ActionEvent(this, e.getTarget()));
         });
 
         Button btnEdit = new Button(Icon.EDIT);
         btnEdit.setFont(Icon.fontAwesome12);
-        btnEdit.setTextFill(Paint.valueOf("white"));
-        btnEdit.setStyle("-fx-background-color: transparent");
-        btnEdit.setCursor(Cursor.HAND);
         
         HBox buttons = new HBox(10, btnPlay, btnEdit);
 
@@ -115,39 +106,13 @@ public class MovieTile extends StackPane {
         });
 
         setOnMouseExited((e) -> {
-            //Go back into place
-            // setHeight(getHeight() - 15);
-            // setWidth(getHeight()/1.5);
-
-            // getChildren().remove(1);
-
-            // getLolomoRow().unfreeze();
-
-            // buttons.setVisible(false);
-
             overlay.setVisible(false);
         });
         
     }
 
     private void popOut() {
-
-        // getLolomoRow().freeze();
-        
-        // setHeight(getHeight() + 15);
-        // setWidth(getHeight());
-
-        // Button btnEdit = new Button();
-        // VBox buttons = new VBox(btnEdit);
-
-        // getChildren().add(buttons);
-
-        // buttons.setPrefHeight(getHeight());
-        // buttons.setPrefWidth(getWidth()/2);
-        // buttons.setVisible(true);
-
-        overlay.setVisible(true);
-        
+        overlay.setVisible(true);  
     }
 
     private LolomoRow getLolomoRow() {
@@ -169,14 +134,6 @@ public class MovieTile extends StackPane {
     public Duration getResumeTime() {
         return Duration.minutes(resume_time);
     }
-
-    // public Label getLabel() {
-    //     return lblTitle;
-    // }
-
-    // public Button getButton() {
-    //     return btnPlay;
-    // }
 
     public void setOnPlay(EventHandler<ActionEvent> value) {
         onPlay = value;

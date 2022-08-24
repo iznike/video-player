@@ -1,14 +1,10 @@
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -37,17 +33,11 @@ public class LolomoRow extends VBox{
 
         Button btnLeft = new Button(Icon.CHEVRON_LEFT);
         btnLeft.setFont(Icon.fontAwesome18);
-        // btnLeft.setTextFill(Paint.valueOf("white"));
         btnLeft.prefHeightProperty().bind(nodeList.heightProperty());
-        // btnLeft.setCursor(Cursor.HAND);
-        btnLeft.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;");
         
         Button btnRight = new Button(Icon.CHEVRON_RIGHT);
         btnRight.setFont(Icon.fontAwesome18);
-        // btnRight.setTextFill(Paint.valueOf("white"));
         btnRight.prefHeightProperty().bind(nodeList.heightProperty());
-        // btnRight.setCursor(Cursor.HAND);
-        btnRight.setStyle("-fx-background-color: transparent; -fx-text-fill: white; -fx-cursor: hand;");
 
         HBox row = new HBox(btnLeft, scrollPane, btnRight);
 
@@ -77,11 +67,6 @@ public class LolomoRow extends VBox{
         this();
         setTitle(title);
     }
-
-    // @Override
-    // public ObservableList<Node> getChildren() {
-    //     return nodeList.getChildren();
-    // }
 
     public void addChildren(Node... content) {
         nodeList.getChildren().addAll(content);
