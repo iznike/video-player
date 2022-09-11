@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -6,9 +7,11 @@ import java.net.URL;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -29,6 +32,7 @@ import javafx.scene.media.Media;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class MovieTile extends StackPane {
@@ -37,32 +41,25 @@ public class MovieTile extends StackPane {
     private String title;
     private File file;
     private double resume_time;
+    private String poster_path;
 
     private VBox overlay;
 
     private EventHandler<ActionEvent> onPlay;
 
-    public MovieTile(int video_id, String title, String path, double resume_time) {
+    public MovieTile(int video_id, String title, String path, String poster_path, double resume_time) {
 
         this.video_id = video_id;
         this.title = title;
         file = new File(path);
         this.resume_time = resume_time;
+        this.poster_path = poster_path;
 
         setHeight(300);
 
         //Create ImageView
-        String urlString = "";
-        try {
-            URI uri = new URI("https://www.themoviedb.org/t/p/original/cFcZYgPRFZdBkA7EsxHz5Cb8x5.jpg");
-            urlString = uri.toURL().toString();
-        } catch (URISyntaxException ex) {
-            ex.printStackTrace();
-        } catch (MalformedURLException ex) {
-            ex.printStackTrace();
-        }
-
-        ImageView imageView = new ImageView(urlString);
+        Image poster = new Image(poster_path);
+        ImageView imageView = new ImageView(poster);
         imageView.setPreserveRatio(true);
         imageView.fitHeightProperty().bind(heightProperty());
         imageView.fitWidthProperty().bind(heightProperty().divide(1.5));
@@ -77,6 +74,25 @@ public class MovieTile extends StackPane {
 
         Button btnEdit = new Button(Icon.EDIT);
         btnEdit.setFont(Icon.fontAwesome12);
+        btnEdit.setOnAction((e) -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(new File("src/new_video_dialog.fxml").toURI().toURL());
+                Stage dialog = new Stage();
+                dialog.setTitle("Edit Video");
+                dialog.setScene(new Scene(loader.load()));
+                dialog.setResizable(false);
+
+                NewVideoDialogController controller = loader.getController();
+                controller.populate(video_id, file.getPath(), title, poster_path);
+
+                dialog.showAndWait();
+                HomeController homeController = (HomeController)getScene().getUserData();
+                homeController.initialize();
+    
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
         
         HBox buttons = new HBox(10, btnPlay, btnEdit);
 

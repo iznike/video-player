@@ -16,8 +16,9 @@ public class Main extends Application{
         DBController.createDB();
         Icon.loadFonts();
 
-        Parent root = FXMLLoader.load(new File("src/home.fxml").toURI().toURL());
-        Scene scene = new Scene(root);
+        FXMLLoader loader = new FXMLLoader(new File("src/home.fxml").toURI().toURL());
+        Scene scene = new Scene(loader.load());
+        scene.setUserData(loader.getController());
         stage.setScene(scene);
         stage.show();
     }

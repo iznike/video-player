@@ -224,6 +224,7 @@ public class PlayerController {
         try {
             Parent root = FXMLLoader.load(new File("src/home.fxml").toURI().toURL());
             Scene scene = new Scene(root);
+            stage.setTitle("");
             stage.setScene(scene);
         } catch (IOException ex) {
             ex.printStackTrace();

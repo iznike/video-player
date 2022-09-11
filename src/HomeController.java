@@ -6,11 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class HomeController {
@@ -24,11 +20,11 @@ public class HomeController {
     private LolomoRow videoList;
 
     @FXML
-    private void initialize() {
+    public void initialize() {
 
         videoList = new LolomoRow();
-        videoList.setTitle("test row");
-        lolomo.getChildren().add(videoList);
+        // videoList.setTitle("Videos");
+        lolomo.getChildren().clear();
 
         ArrayList<MovieTile> tiles = DBController.selectVideosAsTiles();
         tiles.forEach((x) -> {
@@ -38,24 +34,43 @@ public class HomeController {
                 // videoList.getChildren().add(x);
                 videoList.addChildren(x);
             });
+
+        //Only show lolomo row if it isn't empty
+        if (!videoList.isEmpty()) {
+            lolomo.getChildren().add(videoList);
+        }
     }
 
     @FXML
     private void addVideo() {
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select video file");
-        File selectedFile = fileChooser.showOpenDialog(addButton.getScene().getWindow());
+        // FileChooser fileChooser = new FileChooser();
+        // fileChooser.setTitle("Select video file");
+        // File selectedFile = fileChooser.showOpenDialog(addButton.getScene().getWindow());
 
-        if (selectedFile != null) {
-            int id = DBController.insertVideo(selectedFile.getPath(), selectedFile.getPath());
-            MovieTile tile = new MovieTile(id, selectedFile.getName(), selectedFile.getPath(), 0);
-                tile.setOnPlay((e) -> {
-                    playVideo((MovieTile) e.getSource());
-                });
-                // videoList.getChildren().add(tile);
-                videoList.addChildren(tile);
+        // if (selectedFile != null) {
+        //     int id = DBController.insertVideo(selectedFile.getPath(), selectedFile.getPath());
+        //     MovieTile tile = new MovieTile(id, selectedFile.getName(), selectedFile.getPath(), 0);
+        //         tile.setOnPlay((e) -> {
+        //             playVideo((MovieTile) e.getSource());
+        //         });
+        //         // videoList.getChildren().add(tile);
+        //         videoList.addChildren(tile);
+        // }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(new File("src/new_video_dialog.fxml").toURI().toURL());
+            Stage dialog = new Stage();
+            dialog.setTitle("New Video");
+            dialog.setScene(new Scene(loader.load()));
+            dialog.setResizable(false);
+            dialog.showAndWait();
+            initialize();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
+
     }
 
     private void playVideo(MovieTile tile) {

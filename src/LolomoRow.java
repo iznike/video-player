@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
@@ -18,7 +19,7 @@ public class LolomoRow extends VBox{
     public LolomoRow() {
 
         //Row title node
-        lblTitle = new Label();
+        lblTitle = new Label("");
         lblTitle.setFont(Font.font("Arial", FontWeight.BOLD, 18));
         lblTitle.setTextFill(Paint.valueOf("white"));
         lblTitle.setPadding(new Insets(0, 0, 0, 40));
@@ -40,6 +41,7 @@ public class LolomoRow extends VBox{
         btnRight.prefHeightProperty().bind(nodeList.heightProperty());
 
         HBox row = new HBox(btnLeft, scrollPane, btnRight);
+        HBox.setHgrow(scrollPane, Priority.ALWAYS);
 
         getChildren().addAll(lblTitle, row);
         setSpacing(10);
@@ -78,6 +80,10 @@ public class LolomoRow extends VBox{
 
     public void setTitle(String title) {
         lblTitle.setText(title);
+    }
+
+    public boolean isEmpty() {
+        return nodeList.getChildren().isEmpty();
     }
 
 }

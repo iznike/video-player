@@ -3,3 +3,11 @@
     -fx-text-fill: white;
     -fx-cursor: hand;
 }
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.text-field {
+    -fx-background-color: rgb(15, 15, 15);
+}

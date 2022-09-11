@@ -35,6 +35,10 @@ public class Icon {
 
     public static final String CHEVRON_RIGHT = "\uf054";
 
+    public static final String FILE_IMAGE = "\uf1c5";
+
+    public static final String FILE_VIDEO = "\uf1c8";
+
     public static final void loadFonts() {
         fontAwesome12 = loadFontBySize(12);
         fontAwesome18 = loadFontBySize(18);
