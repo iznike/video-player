@@ -1,6 +1,6 @@
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javafx.scene.text.Font;
 
@@ -46,7 +46,7 @@ public class Icon {
     
     private static final Font loadFontBySize(double size) {
         Font font = null;
-        try (FileInputStream fileInputStream = new FileInputStream("src\\Font Awesome 5 Free-Solid-900.otf")) {
+        try (InputStream fileInputStream = Icon.class.getClassLoader().getResourceAsStream("Font Awesome 5 Free-Solid-900.otf")) {
             font = Font.loadFont(fileInputStream, size);
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();

@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.IOException;
 
 import javafx.animation.PauseTransition;
@@ -222,7 +221,7 @@ public class PlayerController {
                 
         //Load home page
         try {
-            Parent root = FXMLLoader.load(new File("src/home.fxml").toURI().toURL());
+            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("home.fxml"));
             Scene scene = new Scene(root);
             stage.setTitle("");
             stage.setScene(scene);

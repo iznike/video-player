@@ -1,4 +1,3 @@
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -23,7 +22,6 @@ public class HomeController {
     public void initialize() {
 
         videoList = new LolomoRow();
-        // videoList.setTitle("Videos");
         lolomo.getChildren().clear();
 
         ArrayList<MovieTile> tiles = DBController.selectVideosAsTiles();
@@ -31,7 +29,6 @@ public class HomeController {
                 x.setOnPlay((e) -> {
                     playVideo((MovieTile) e.getSource());
                 });
-                // videoList.getChildren().add(x);
                 videoList.addChildren(x);
             });
 
@@ -44,22 +41,8 @@ public class HomeController {
     @FXML
     private void addVideo() {
 
-        // FileChooser fileChooser = new FileChooser();
-        // fileChooser.setTitle("Select video file");
-        // File selectedFile = fileChooser.showOpenDialog(addButton.getScene().getWindow());
-
-        // if (selectedFile != null) {
-        //     int id = DBController.insertVideo(selectedFile.getPath(), selectedFile.getPath());
-        //     MovieTile tile = new MovieTile(id, selectedFile.getName(), selectedFile.getPath(), 0);
-        //         tile.setOnPlay((e) -> {
-        //             playVideo((MovieTile) e.getSource());
-        //         });
-        //         // videoList.getChildren().add(tile);
-        //         videoList.addChildren(tile);
-        // }
-
         try {
-            FXMLLoader loader = new FXMLLoader(new File("src/new_video_dialog.fxml").toURI().toURL());
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("new_video_dialog.fxml"));
             Stage dialog = new Stage();
             dialog.setTitle("New Video");
             dialog.setScene(new Scene(loader.load()));
@@ -76,7 +59,7 @@ public class HomeController {
     private void playVideo(MovieTile tile) {
 
         try {
-            FXMLLoader loader = new FXMLLoader(new File("src/player.fxml").toURI().toURL());
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("player.fxml"));
             Scene scene = new Scene(loader.load());
             Stage stage = (Stage) addButton.getScene().getWindow();
             stage.setScene(scene);

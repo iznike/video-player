@@ -1,9 +1,5 @@
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,22 +12,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -41,7 +26,7 @@ public class MovieTile extends StackPane {
     private String title;
     private File file;
     private double resume_time;
-    private String poster_path;
+    // private String poster_path;
 
     private VBox overlay;
 
@@ -53,7 +38,7 @@ public class MovieTile extends StackPane {
         this.title = title;
         file = new File(path);
         this.resume_time = resume_time;
-        this.poster_path = poster_path;
+        // this.poster_path = poster_path;
 
         setHeight(300);
 
@@ -76,7 +61,7 @@ public class MovieTile extends StackPane {
         btnEdit.setFont(Icon.fontAwesome12);
         btnEdit.setOnAction((e) -> {
             try {
-                FXMLLoader loader = new FXMLLoader(new File("src/new_video_dialog.fxml").toURI().toURL());
+                FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("new_video_dialog.fxml"));
                 Stage dialog = new Stage();
                 dialog.setTitle("Edit Video");
                 dialog.setScene(new Scene(loader.load()));
@@ -131,9 +116,9 @@ public class MovieTile extends StackPane {
         overlay.setVisible(true);  
     }
 
-    private LolomoRow getLolomoRow() {
-        return (LolomoRow) getParent().getParent().getParent().getParent().getParent().getParent();
-    }
+    // private LolomoRow getLolomoRow() {
+    //     return (LolomoRow) getParent().getParent().getParent().getParent().getParent().getParent();
+    // }
 
     public int getVideoID() {
         return video_id;
