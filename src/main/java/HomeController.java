@@ -65,7 +65,7 @@ public class HomeController {
             stage.setScene(scene);
 
             PlayerController controller = loader.getController();
-            controller.loadVideo(tile.getVideoID(), tile.getTitle(), tile.getMedia(), tile.getResumeTime());
+            controller.loadVideo(tile.getVideoID(), tile.getTitle(), tile.getPath(), tile.getResumeTime());
 
         } catch (IOException ex) {
             ex.printStackTrace();

@@ -1,4 +1,5 @@
 import java.io.File;
+import java.net.URL;
 import java.util.Optional;
 
 import javafx.fxml.FXML;
@@ -8,10 +9,11 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaException;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
+import uk.co.caprica.vlcj.media.Media;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
 
 public class NewVideoDialogController {
     
@@ -140,8 +142,8 @@ public class NewVideoDialogController {
 
     private boolean validateVideo() {
         try {
-            new Media(new File(url.getText()).toURI().toString());
-        } catch (MediaException e) {
+            new URL(url.getText()).toURI();
+        } catch (Exception e) {
             new Alert(AlertType.ERROR, "Video URL is not valid.").show();
             return false;
         }
@@ -149,6 +151,10 @@ public class NewVideoDialogController {
     }
 
     private boolean validateImage() {
+        if (poster.getText().isBlank()) {
+            new Alert(AlertType.ERROR, "Poster URL is not valid.").show();
+            return false;
+        }
         Image image = new Image(poster.getText());
         if (image.isError()) {
             new Alert(AlertType.ERROR, "Poster URL is not valid.").show();

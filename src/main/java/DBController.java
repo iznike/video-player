@@ -40,7 +40,7 @@ public class DBController {
         }
     }
 
-    public static int insertVideo(String title, String file, String poster, double resume_time) {
+    public static int insertVideo(String title, String file, String poster, long resume_time) {
         int id = 0;
         String sql = "INSERT INTO videos(title, file, poster, resume_time) VALUES(?, ?, ?, ?)";
 
@@ -50,7 +50,7 @@ public class DBController {
             pstmt.setString(1, title);
             pstmt.setString(2, file);
             pstmt.setString(3, poster);
-            pstmt.setDouble(4, resume_time);
+            pstmt.setLong(4, resume_time);
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
@@ -104,7 +104,7 @@ public class DBController {
                                         rs.getString("title"),
                                         rs.getString("file"),
                                         rs.getString("poster"),
-                                        rs.getDouble("resume_time")));
+                                        rs.getLong("resume_time")));
             }
 
         } catch (SQLException ex) {
@@ -114,13 +114,13 @@ public class DBController {
         return videos;
     }
 
-    public static void updateVideoTime(int video_id, double resume_time) {
+    public static void updateVideoTime(int video_id, long resume_time) {
         String sql = "UPDATE videos SET resume_time = ? WHERE video_id = ?";
 
         try (Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setDouble(1, resume_time);
+            pstmt.setLong(1, resume_time);
             pstmt.setInt(2, video_id);
             pstmt.executeUpdate();
 

@@ -1,6 +1,8 @@
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
@@ -12,13 +14,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.Slider;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
+import uk.co.caprica.vlcj.javafx.videosurface.ImageViewVideoSurface;
+import uk.co.caprica.vlcj.player.base.MediaPlayer;
+import uk.co.caprica.vlcj.player.base.MediaPlayerEventAdapter;
+import uk.co.caprica.vlcj.player.base.State;
+import uk.co.caprica.vlcj.player.embedded.EmbeddedMediaPlayer;
 
 public class PlayerController {
     
@@ -26,7 +32,7 @@ public class PlayerController {
     private StackPane stack;
 
     @FXML
-    private MediaView mediaView;
+    private ImageView videoImageView;
 
     @FXML
     private BorderPane border;
@@ -66,13 +72,18 @@ public class PlayerController {
 
     private int video_id;
     private Stage stage;
-    private MediaPlayer mediaPlayer;
+    private EmbeddedMediaPlayer mediaPlayer;
     private boolean playing;
-    private boolean seeking = false;
+    private AtomicBoolean seeking = new AtomicBoolean(false);
 
     @FXML
     private void initialize() {
  
+        //Set up media player
+        MediaPlayerFactory factory = new MediaPlayerFactory();
+        mediaPlayer = factory.mediaPlayers().newEmbeddedMediaPlayer();
+        mediaPlayer.videoSurface().set(new ImageViewVideoSurface(videoImageView));
+        
         //Set up icons
         Labeled[] iconsNeeded12 = {btnBackTen, btnForwardTen, btnVolume};
         for (int i=0;i<iconsNeeded12.length;i++) {
@@ -113,7 +124,7 @@ public class PlayerController {
 
     }
 
-    public void loadVideo(int video_id, String title, Media media, Duration resumeTime) {
+    public void loadVideo(int video_id, String title, String path, long resumeTime) {
 
         this.video_id = video_id;
         stage = (Stage) stack.getScene().getWindow();
@@ -135,59 +146,66 @@ public class PlayerController {
             }
         });
 
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.setOnReady(() -> {
-            //Once mediaPlayer has loaded media
-            slider.setMax(media.getDuration().toMinutes());
-            lblMaxTime.setText(minutesToHMS(slider.getMax()));
-            mediaPlayer.seek(resumeTime);
-            mediaPlayer.play();
-            playing = true;
+        String startTimeOption = ":start-time=" + (resumeTime/1000);    //milliseconds to seconds
+        mediaPlayer.media().play(path, startTimeOption);
+        playing = true;
+
+        mediaPlayer.events().addMediaPlayerEventListener(new MediaPlayerEventAdapter() {
+
+            @Override
+            public void lengthChanged(MediaPlayer mediaPlayer, long newLength) {
+                Platform.runLater(() -> updateDuration(newLength));
+            }
+
+            @Override
+            public void error(MediaPlayer mediaPlayer) {
+                System.out.println("media error");
+            }
+
+            //Change volume button icon as volume is changed
+            @Override
+            public void volumeChanged(MediaPlayer mediaPlayer, float volume) {
+                Platform.runLater(() -> setVolumeIcon());
+            }
+
+            //When mediaPlayer time changes, update slider value and current time label
+            @Override
+            public void timeChanged(MediaPlayer mediaPlayer, long newTime) {
+                Platform.runLater(() -> updateSliderPosition(newTime));
+            }
         });
-        mediaPlayer.setOnError(()->System.out.println("media error"+mediaPlayer.getError().toString()));
-        mediaView.setMediaPlayer(mediaPlayer);
 
         //Bind mediaView width to width of window
-        mediaView.fitWidthProperty().bind(stage.getScene().widthProperty());
+        videoImageView.fitWidthProperty().bind(stage.getScene().widthProperty());
 
         //Bind mediaPlayer volume to volumeSlider
-        mediaPlayer.volumeProperty().bind(volumeSlider.valueProperty());
-
-        //Change volume button icon as volume is changed
-        mediaPlayer.volumeProperty().addListener((obs, oldVolume, newVolume) -> {
-            setVolumeIcon();
-        });
-
-        //When mediaPlayer time changes, update slider value and current time label
-        mediaPlayer.currentTimeProperty().addListener((obs, oldTime, newTime) -> {
-            if (!seeking) {
-                slider.setValue(newTime.toMinutes());
-            }
-            lblCurrentTime.setText(minutesToHMS(newTime.toMinutes()));
+        // mediaPlayer.volumeProperty().bind(volumeSlider.valueProperty());
+        volumeSlider.valueProperty().addListener((obs, oldVolume, newVolume) -> {
+            mediaPlayer.audio().setVolume(newVolume.intValue());
         });
 
         //If slider value changes to something different than current mediaPlayer time, update mediaPlayer time
         slider.setOnMouseReleased((e) -> {
-            if (slider.getValue() != mediaPlayer.getCurrentTime().toMinutes()){
-                mediaPlayer.seek(Duration.minutes(slider.getValue()));
+            if (slider.getValue() != (double)mediaPlayer.status().time()){
+                mediaPlayer.controls().setTime((long)slider.getValue());
             }
-            seeking = false;
+            seeking.set(false);
         });
         
         //While dragging the automatic update of slider with time stops (so it doesn't jerk around)
         slider.setOnDragDetected((e) -> {
-            seeking = true;
+            seeking.set(true);
         });
     }
 
     @FXML
     private void playPause() {
         if (playing) {
-            mediaPlayer.pause();
+            mediaPlayer.controls().pause();
             playing = false;
             btnPause.setText(Icon.PLAY);
         } else {
-            mediaPlayer.play();
+            mediaPlayer.controls().play();
             playing = true;
             btnPause.setText(Icon.PAUSE);
         }
@@ -195,12 +213,12 @@ public class PlayerController {
 
     @FXML
     private void backTen() {
-        mediaPlayer.seek(mediaPlayer.getCurrentTime().subtract(Duration.seconds(10)));
+        mediaPlayer.controls().skipTime(-10000);
     }
 
     @FXML
     private void forwardTen() {
-        mediaPlayer.seek(mediaPlayer.getCurrentTime().add(Duration.seconds(10)));
+        mediaPlayer.controls().skipTime(10000);
     }
 
     @FXML
@@ -214,10 +232,23 @@ public class PlayerController {
         }
     }
 
+    private synchronized void updateSliderPosition(float newTime) {
+        if (!seeking.get()) {
+            slider.setValue(newTime);
+        }
+        lblCurrentTime.setText(msToHMS(newTime));
+    }
+
+    private synchronized void updateDuration(long newLength) {
+        slider.setMax(newLength);
+        lblMaxTime.setText(msToHMS(newLength));
+    }
+
     @FXML
     private void exit() {
 
         saveResumeTime();
+        mediaPlayer.release();
                 
         //Load home page
         try {
@@ -244,45 +275,45 @@ public class PlayerController {
     @FXML
     private void onVolumeClicked() {
         //Unmute or mute
-        if (mediaPlayer.isMute()) {
-            mediaPlayer.setMute(false);
+        if (mediaPlayer.audio().isMute()) {
+            mediaPlayer.audio().setMute(false);
             setVolumeIcon();
         }
         else {
-            mediaPlayer.setMute(true);
+            mediaPlayer.audio().setMute(true);
             btnVolume.setText(Icon.VOLUME_MUTE);
         }
     }
 
-    private void setVolumeIcon() {
+    private synchronized void setVolumeIcon() {
         double volumeValue = volumeSlider.getValue();
 
-        //Set volume button icon based on what the volume is
+        //Set volume button icon based on what the volume is (max is 200)
         if (volumeValue == 0) {
             btnVolume.setText(Icon.VOLUME_MUTE);
         }
-        else if (volumeValue > 0 && volumeValue <= 0.5) {
+        else if (volumeValue > 0 && volumeValue <= 100) {
             btnVolume.setText(Icon.VOLUME_DOWN);
         }
         else {
             btnVolume.setText(Icon.VOLUME_UP);
-        }
+        }   
     }
 
-    private String minutesToHMS(double mins) {
+    private String msToHMS(double milliseconds) {
 
-        double tempMins = mins;
+        double mins = milliseconds/60000;
         int hours = 0;
         int minutes = 0;
         int seconds = 0;
 
         if (mins >= 60) {
-            hours = (int)(tempMins / 60);
-            tempMins -= hours * 60;
+            hours = (int)(mins / 60);
+            mins -= hours * 60;
         }
 
-        minutes = (int)tempMins;
-        seconds = (int)((tempMins - minutes) * 60);
+        minutes = (int)mins;
+        seconds = (int)((mins - minutes) * 60);
 
         String HMS = String.format("%02d:%02d", minutes, seconds);
         if (hours != 0) {
@@ -294,16 +325,16 @@ public class PlayerController {
 
     private void saveResumeTime() {
 
-        Duration currentTime = mediaPlayer.getCurrentTime();
+        long currentTime = mediaPlayer.status().time();
 
         //If video at end, reset resume time to 0, if not, save where video is up to and stop it
-        if (currentTime.equals(mediaPlayer.getStopTime())) {
+        if (mediaPlayer.status().state() == State.ENDED) {
             DBController.updateVideoTime(video_id, 0);
         } else {
-            DBController.updateVideoTime(video_id, currentTime.toMinutes());
+            DBController.updateVideoTime(video_id, currentTime);
         }
 
-        mediaPlayer.stop();
+        mediaPlayer.controls().stop();
 
     }
 

@@ -24,19 +24,21 @@ public class MovieTile extends StackPane {
     
     private int video_id;
     private String title;
-    private File file;
-    private double resume_time;
+    // private File file;
+    private String path;
+    private long resume_time;
     // private String poster_path;
 
     private VBox overlay;
 
     private EventHandler<ActionEvent> onPlay;
 
-    public MovieTile(int video_id, String title, String path, String poster_path, double resume_time) {
+    public MovieTile(int video_id, String title, String path, String poster_path, long resume_time) {
 
         this.video_id = video_id;
         this.title = title;
-        file = new File(path);
+        // file = new File(path);
+        this.path = path;
         this.resume_time = resume_time;
         // this.poster_path = poster_path;
 
@@ -68,7 +70,7 @@ public class MovieTile extends StackPane {
                 dialog.setResizable(false);
 
                 NewVideoDialogController controller = loader.getController();
-                controller.populate(video_id, file.getPath(), title, poster_path);
+                controller.populate(video_id, path, title, poster_path);
 
                 dialog.showAndWait();
                 HomeController homeController = (HomeController)getScene().getUserData();
@@ -128,12 +130,20 @@ public class MovieTile extends StackPane {
         return title;
     }
 
-    public Media getMedia() {
-        return new Media(file.toURI().toString());
+    public String getPath() {
+        return path;
     }
 
-    public Duration getResumeTime() {
-        return Duration.minutes(resume_time);
+    // public Media getMedia() {
+    //     return new Media(file.toURI().toString());
+    // }
+
+    // public File getFile() {
+    //     return file;
+    // }
+
+    public long getResumeTime() {
+        return resume_time;
     }
 
     public void setOnPlay(EventHandler<ActionEvent> value) {
