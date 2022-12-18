@@ -38,7 +38,10 @@
                   <Insets right="10.0" />
                </padding>
             </HBox>
-            <Button fx:id="btnChooseVideo" mnemonicParsing="false" onAction="#ChooseVideo" GridPane.columnIndex="2" />
+            <Button fx:id="btnChooseVideo" mnemonicParsing="false" onAction="#ChooseVideo" style="-fx-font-size: 18;" styleClass="icon" GridPane.columnIndex="2">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font></Button>
             <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1">
                <children>
                   <Label text="TITLE:" textFill="#c269bc">
@@ -65,7 +68,7 @@
                </padding>
             </HBox>
             <TextField fx:id="poster" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Button fx:id="btnChooseImage" mnemonicParsing="false" onAction="#ChooseImage" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Button fx:id="btnChooseImage" mnemonicParsing="false" onAction="#ChooseImage" style="-fx-font-size: 18;" styleClass="icon" GridPane.columnIndex="2" GridPane.rowIndex="2" />
          </children>
          <padding>
             <Insets left="20.0" right="20.0" />

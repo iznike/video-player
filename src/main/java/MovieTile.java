@@ -43,6 +43,7 @@ public class MovieTile extends StackPane {
         // this.poster_path = poster_path;
 
         setHeight(300);
+        getStyleClass().add("tile");
 
         //Create ImageView
         Image poster = new Image(poster_path);
@@ -54,13 +55,13 @@ public class MovieTile extends StackPane {
 
         //Set up buttons
         Button btnPlay = new Button(Icon.PLAY);
-        btnPlay.setFont(Icon.fontAwesome12);
+        btnPlay.getStyleClass().add("icon");
         btnPlay.setOnAction((e) -> {
             onPlay.handle(new ActionEvent(this, e.getTarget()));
         });
 
         Button btnEdit = new Button(Icon.EDIT);
-        btnEdit.setFont(Icon.fontAwesome12);
+        btnEdit.getStyleClass().add("icon");
         btnEdit.setOnAction((e) -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("new_video_dialog.fxml"));

@@ -49,9 +49,6 @@ public class NewVideoDialogController {
     @FXML
     private void initialize() {
 
-        btnChooseVideo.setFont(Icon.fontAwesome18);
-        btnChooseImage.setFont(Icon.fontAwesome18);
-
         btnChooseVideo.setText(Icon.FILE_VIDEO);
         btnChooseImage.setText(Icon.FILE_IMAGE);
     }

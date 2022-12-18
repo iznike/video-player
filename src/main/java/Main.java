@@ -10,7 +10,7 @@ public class Main extends Application{
     @Override
     public void start(Stage stage) throws IOException{
         DBController.createDB();
-        Icon.loadFonts();
+        Icon.loadIconFont();
 
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("home.fxml"));
         Scene scene = new Scene(loader.load());

@@ -33,11 +33,11 @@ public class LolomoRow extends VBox{
         scrollPane.setStyle("-fx-background-color: transparent");
 
         Button btnLeft = new Button(Icon.CHEVRON_LEFT);
-        btnLeft.setFont(Icon.fontAwesome18);
+        btnLeft.setFont(Icon.getIconFont(18));
         btnLeft.prefHeightProperty().bind(nodeList.heightProperty());
         
         Button btnRight = new Button(Icon.CHEVRON_RIGHT);
-        btnRight.setFont(Icon.fontAwesome18);
+        btnRight.setFont(Icon.getIconFont(18));
         btnRight.prefHeightProperty().bind(nodeList.heightProperty());
 
         HBox row = new HBox(btnLeft, scrollPane, btnRight);

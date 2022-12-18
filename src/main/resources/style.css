@@ -11,3 +11,17 @@
 .text-field {
     -fx-background-color: rgb(15, 15, 15);
 }
+
+.icon {
+    -fx-font-family: "Font Awesome 5 Free Solid";
+    -fx-padding: 0px;
+}
+
+.player .icon {
+    -fx-font-size: 23;
+}
+
+.tile .icon {
+    -fx-font-size: 16;
+    -fx-margin: 3;
+}

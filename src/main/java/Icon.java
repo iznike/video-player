@@ -6,8 +6,7 @@ import javafx.scene.text.Font;
 
 public class Icon {
     
-    public static Font fontAwesome12;
-    public static Font fontAwesome18;
+    public static Font fontAwesome;
 
     public static final String PLAY = "\uf04b";
 
@@ -39,21 +38,22 @@ public class Icon {
 
     public static final String FILE_VIDEO = "\uf1c8";
 
-    public static final void loadFonts() {
-        fontAwesome12 = loadFontBySize(12);
-        fontAwesome18 = loadFontBySize(18);
-    }
     
-    private static final Font loadFontBySize(double size) {
-        Font font = null;
+    public static final void loadIconFont() {
+        // Font font = null;
         try (InputStream fileInputStream = Icon.class.getClassLoader().getResourceAsStream("Font Awesome 5 Free-Solid-900.otf")) {
-            font = Font.loadFont(fileInputStream, size);
+            fontAwesome = Font.loadFont(fileInputStream, 12);
         } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        return font;
     }
+
+    public static final Font getIconFont(double size) {
+        return Font.font(fontAwesome.getFamily(), size);
+    }
+
+    
 
 }

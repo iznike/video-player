@@ -17,6 +17,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import uk.co.caprica.vlcj.factory.MediaPlayerFactory;
@@ -85,15 +86,15 @@ public class PlayerController {
         mediaPlayer.videoSurface().set(new ImageViewVideoSurface(videoImageView));
         
         //Set up icons
-        Labeled[] iconsNeeded12 = {btnBackTen, btnForwardTen, btnVolume};
-        for (int i=0;i<iconsNeeded12.length;i++) {
-            iconsNeeded12[i].setFont(Icon.fontAwesome12);
-        }
+        // Labeled[] iconsNeeded12 = {btnBackTen, btnForwardTen, btnVolume};
+        // for (int i=0;i<iconsNeeded12.length;i++) {
+        //     iconsNeeded12[i].setFont(Icon.fontAwesome12);
+        // }
         
-        Labeled[] iconsNeeded18 = {btnBack, btnPause, btnFullScreen};
-        for (int i=0;i<iconsNeeded18.length;i++) {
-            iconsNeeded18[i].setFont(Icon.fontAwesome18);
-        }
+        // Labeled[] iconsNeeded18 = {btnBack, btnPause, btnFullScreen};
+        // for (int i=0;i<iconsNeeded18.length;i++) {
+        //     iconsNeeded18[i].setFont(Icon.fontAwesome18);
+        // }
 
         btnBack.setText(Icon.ARROW_LEFT);
         btnPause.setText(Icon.PAUSE);
@@ -101,6 +102,10 @@ public class PlayerController {
         btnForwardTen.setText(Icon.FORWARD);
         btnFullScreen.setText(Icon.EXPAND);
         btnVolume.setText(Icon.VOLUME_DOWN);
+
+        // btnPause.setFont(Font.font(Icon.fontAwesome18.getFamily(), 38));
+        // System.out.println(Icon.fontAwesome12.getFamily());
+        // btnPause.setStyle("-fx-font: 40 'Font Awesome 5 Free Solid'");
         
         //Mouse movement detection
         BooleanProperty mouseMoving = new SimpleBooleanProperty();
