@@ -29,6 +29,13 @@ public class DBController {
                         "file TEXT NOT NULL, " +
                         "poster TEXT NOT NULL, " +
                         "resume_time REAL)";
+
+        // String content = "CREATE TABLE IF NOT EXISTS Content " +
+        //                     "(content_id INT PRIMARY KEY AUTOINCREMENT, " +
+        //                     "title TEXT NOT NULL, " +
+        //                     "poster TEXT NOT NULL, " +
+        //                     "watching INT(1) DEFAULT FALSE NOT NULL, " +
+        //                     "resume_series INT)";
         
         try {
             Statement stmt = conn.createStatement();
